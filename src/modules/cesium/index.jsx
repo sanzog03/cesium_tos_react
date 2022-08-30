@@ -107,9 +107,7 @@ class FCXViewer extends Component {
 
     render() {
       return (
-        <>
             <div id="cesiumContainer"></div>
-        </>
       )
     }
 }

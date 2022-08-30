@@ -4,10 +4,8 @@ import FCXViewer from './modules/cesium';
 
 function App() {
   return (
-    <div className="App">
-      <React.StrictMode>
+    <div className="App">   
         <FCXViewer/>
-      </React.StrictMode>
     </div>
   );
 }
