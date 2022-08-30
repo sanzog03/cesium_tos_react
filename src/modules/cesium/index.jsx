@@ -17,7 +17,6 @@ class FCXViewer extends Component {
 
     componentDidMount() {
         // dont change states here. will cause double render.
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         this.startDrawing();
     }
 
@@ -93,7 +92,7 @@ class FCXViewer extends Component {
             const airPlaneEntity = viewer.entities.add({
                 availability: new Cesium.TimeIntervalCollection([ new Cesium.TimeInterval({ start: startTime, stop: endTime }) ]),
                 position: positionProperty,
-                // point: {pixelSize: 30, color: Cesium.Color.Green},
+                point: {pixelSize: 30},
                 model: {uri: airPlaneModel, scale: 0.1},
                 orientation: new Cesium.VelocityOrientationProperty(positionProperty),
                 path: new Cesium.PathGraphics({width: 3})
