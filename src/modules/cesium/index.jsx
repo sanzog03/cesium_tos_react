@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import flightDataRaw from "./flightData.js";
+import dataCUS from "./testData.czml";
 
 // The URL on your server where CesiumJS's static files are hosted.
 window.CESIUM_BASE_URL = '/';
@@ -17,7 +18,8 @@ class FCXViewer extends Component {
 
     componentDidMount() {
         // dont change states here. will cause double render.
-        this.startDrawing();
+        // this.startDrawing();
+        this.startDrawingCZML();
     }
 
     startDrawing() {
@@ -102,6 +104,29 @@ class FCXViewer extends Component {
             viewer.trackedEntity = airPlaneEntity;
         }
         play();
+    }
+
+    startDrawingCZML() {
+        const viewer = new Cesium.Viewer("cesiumContainer", {
+            terrainProvider: Cesium.createWorldTerrain(),
+            shouldAnimate: true,
+        });
+
+        doStuffWithCZML()
+
+        function doStuffWithCZML() {
+            // Cesium.CzmlDataSource.load(czml).then(function(testDataSource) {  
+            //     viewer.dataSources.add(testDataSource).then(function() {
+            //     });
+            // });
+
+            viewer.dataSources.add(
+                // Cesium.CzmlDataSource.load("./testData.czml")
+                Cesium.CzmlDataSource.load(dataCUS)
+            );
+            
+            viewer.camera.flyHome(0);
+        }
     }
 
     render() {
