@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import flightDataRaw from "./flightData.js";
-import dataCUS from "./testData.czml";
+import dataCUS from "./impactData.czml";
 
 // The URL on your server where CesiumJS's static files are hosted.
 window.CESIUM_BASE_URL = '/';
