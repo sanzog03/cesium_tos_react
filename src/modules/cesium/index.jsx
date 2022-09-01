@@ -123,6 +123,11 @@ class FCXViewer extends Component {
                 viewer.trackedEntity = p3Entity;
                 const clock = viewer.clock;
 
+                p3Entity.position.setInterpolationOptions({
+                    interpolationDegree : 5,
+                    interpolationAlgorithm : Cesium.HermitePolynomialApproximation
+                    });
+
                 // change the orientation
                 const heading = Cesium.Math.toRadians(270);
                 const pitch = Cesium.Math.toRadians(90);
@@ -130,6 +135,7 @@ class FCXViewer extends Component {
 
                 clock.onTick.addEventListener(() => {
                     const position = p3Entity.position.getValue(clock.currentTime);
+                    // the heading should change with respect to the position.
                     const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
                     const orientation = Cesium.Transforms.headingPitchRollQuaternion(
                         position,
