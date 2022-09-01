@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import flightDataRaw from "./flightData.js";
-import dataCUS from "./impactData.czml";
+import dataImpact from "./impactData.czml";
 
 // The URL on your server where CesiumJS's static files are hosted.
 window.CESIUM_BASE_URL = '/';
@@ -11,10 +11,6 @@ import * as Cesium from 'cesium';
 // import "cesium/Build/Cesium/Widgets/widgets.css";
 
 class FCXViewer extends Component {
-
-    // constructor(props) {
-    //     super(props);
-    // }
 
     componentDidMount() {
         // dont change states here. will cause double render.
@@ -112,20 +108,20 @@ class FCXViewer extends Component {
             shouldAnimate: true,
         });
 
+        viewer.extend(Cesium.viewerCesiumInspectorMixin);
+
         doStuffWithCZML()
 
         function doStuffWithCZML() {
-            // Cesium.CzmlDataSource.load(czml).then(function(testDataSource) {  
-            //     viewer.dataSources.add(testDataSource).then(function() {
-            //     });
-            // });
-
-            viewer.dataSources.add(
-                // Cesium.CzmlDataSource.load("./testData.czml")
-                Cesium.CzmlDataSource.load(dataCUS)
-            );
-            
-            viewer.camera.flyHome(0);
+            // Cesium.CzmlDataSource.load("./testData.czml")
+            // Cesium.CzmlDataSource.load("https://fcx-czml.s3.amazonaws.com/flight_track/goesrplt_naver2_IWG1_20170322-0136")
+            Cesium.CzmlDataSource.load(dataImpact)
+            .then((dataSource) => {
+                viewer.dataSources.add(dataSource);
+                viewer.zoomTo(dataSource);
+                let p3Entity = dataSource.entities.values[0];
+                viewer.trackedEntity = p3Entity;
+            });            
         }
     }
 
