@@ -119,9 +119,9 @@ class FCXViewer extends Component {
             .then((dataSource) => {
                 viewer.dataSources.add(dataSource);
                 viewer.zoomTo(dataSource);
-                let p3Entity = dataSource.entities.values[0];
+                let p3Entity = dataSource.entities.getById("Flight Track");
                 viewer.trackedEntity = p3Entity;
-            });            
+            });
         }
     }
 
