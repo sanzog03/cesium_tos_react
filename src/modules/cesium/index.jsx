@@ -121,6 +121,22 @@ class FCXViewer extends Component {
                 viewer.zoomTo(dataSource);
                 let p3Entity = dataSource.entities.getById("Flight Track");
                 viewer.trackedEntity = p3Entity;
+                const clock = viewer.clock;
+
+                // change the orientation
+                const heading = Cesium.Math.toRadians(270);
+                const pitch = Cesium.Math.toRadians(90);
+                const roll = Cesium.Math.toRadians(0);
+
+                clock.onTick.addEventListener(() => {
+                    const position = p3Entity.position.getValue(clock.currentTime);
+                    const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
+                    const orientation = Cesium.Transforms.headingPitchRollQuaternion(
+                        position,
+                        hpr
+                    );
+                    p3Entity.orientation = orientation;
+                });
             });
         }
     }
