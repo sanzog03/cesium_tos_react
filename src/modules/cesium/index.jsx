@@ -16,6 +16,7 @@ class FCXViewer extends Component {
         // dont change states here. will cause double render.
         // this.startDrawing();
         this.startDrawingCZML();
+        // this.startDrawingPointCloud();
     }
 
     startDrawing() {
@@ -145,6 +146,22 @@ class FCXViewer extends Component {
                 });
             });
         }
+    }
+
+    startDrawingPointCloud() {   
+        Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
+        const viewer = new Cesium.Viewer("cesiumContainer", {
+            terrainProvider: Cesium.createWorldTerrain(),
+            shouldAnimate: true,
+        });
+        const tileset = new Cesium.Cesium3DTileset({
+            url: Cesium.IonResource.fromAssetId(28945),
+        });
+
+        console.log(">>>>>", tileset)
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+        // viewer.trackedEntity = tileset;
     }
 
     render() {
