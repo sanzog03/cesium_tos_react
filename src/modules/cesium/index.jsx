@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import flightDataRaw from "./flightData.js";
-import dataImpact from "./impactData.czml";
+import dataImpact from "./goesrData.czml";
 
 // The URL on your server where CesiumJS's static files are hosted.
 window.CESIUM_BASE_URL = '/';
@@ -14,8 +14,8 @@ class FCXViewer extends Component {
 
     componentDidMount() {
         // dont change states here. will cause double render.
-        // this.startDrawing();
-        this.startDrawingCZML();
+        this.startDrawing();
+        // this.startDrawingCZML();
         // this.startDrawingPointCloud();
     }
 
@@ -85,7 +85,8 @@ class FCXViewer extends Component {
 
         async function play() {
             // add 3d model
-            const airPlaneModel = await Cesium.IonResource.fromAssetId(1284311);
+            // const airPlaneModel = await Cesium.IonResource.fromAssetId(1284311);
+            const airPlaneModel = "https://fcx-czml.s3.amazonaws.com/img/p3.gltf";
 
             // Interpolate the points (position wrt to time)
             const airPlaneEntity = viewer.entities.add({
@@ -124,10 +125,10 @@ class FCXViewer extends Component {
                 viewer.trackedEntity = p3Entity;
                 const clock = viewer.clock;
 
-                p3Entity.position.setInterpolationOptions({
-                    interpolationDegree : 5,
-                    interpolationAlgorithm : Cesium.HermitePolynomialApproximation
-                    });
+                // p3Entity.position.setInterpolationOptions({
+                //     interpolationDegree : 5,
+                //     interpolationAlgorithm : Cesium.HermitePolynomialApproximation
+                //     });
 
                 // change the orientation
                 const heading = Cesium.Math.toRadians(270);
