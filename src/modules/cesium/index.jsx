@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import flightDataRaw from "./flightData.js";
-import dataImpact from "./goesrData.czml";
+import dataImpact from "./impactData.czml";
 
 // The URL on your server where CesiumJS's static files are hosted.
 window.CESIUM_BASE_URL = '/';
@@ -14,9 +14,9 @@ class FCXViewer extends Component {
 
     componentDidMount() {
         // dont change states here. will cause double render.
-        this.startDrawing();
+        // this.startDrawing();
         // this.startDrawingCZML();
-        // this.startDrawingPointCloud();
+        this.startDrawingPointCloud();
     }
 
     startDrawing() {

@@ -1,5 +1,3 @@
-// const { when, whenDev, whenProd, whenTest, ESLINT_MODES, POSTCSS_MODES } = require("@craco/craco");
-
 // The path to the CesiumJS source code
 const cesiumSource = 'node_modules/cesium/Source';
 const cesiumWorkers = '../Build/Cesium/Workers';
@@ -11,6 +9,14 @@ module.exports = {
     reactScriptsVersion: "react-scripts" /* (default value) */,
     webpack: {
         alias: {},
+        style: {
+            modules: {
+                localIdentName: ""
+            },
+            css: {
+                loaderOptions: (cssLoaderOptions, { env, paths }) => { return cssLoaderOptions; }
+            },         
+        },
         plugins: {
             add: [
                 // [ new HtmlWebpackPlugin({ template: 'src/index.html' }), "append"],
@@ -18,7 +24,8 @@ module.exports = {
                     patterns: [
                         { from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' },
                         { from: path.join(cesiumSource, 'Assets'), to: 'Assets' },
-                        { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }
+                        { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' },
+                        { from: path.join(cesiumSource, 'ThirdParty'), to: 'ThirdParty'}
                     ]
                 }), "append"],
                 [ new webpack.DefinePlugin({
