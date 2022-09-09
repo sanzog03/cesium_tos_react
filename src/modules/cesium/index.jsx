@@ -177,9 +177,34 @@ class FCXViewer extends Component {
                 ////////////////////////////////////////
                 // set the camera orientation and keep it far apart from the model.
 
-                viewer.zoomTo(dataSource,  new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-10), 40000));
+                // viewer.zoomTo(dataSource,  new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-10), 40000));
                 // viewer.trackedEntity = p3Entity;
                 // viewer.camera.Zoomout(10000000);
+
+                //Set up chase camera
+                var matrix3Scratch = new Cesium.Matrix3();
+                var positionScratch = new Cesium.Cartesian3();
+                var orientationScratch = new Cesium.Quaternion();
+                function getModelMatrix(entity, time, result) {
+                    var position = Cesium.Property.getValueOrUndefined(entity.position, time, positionScratch);
+                    if (!Cesium.defined(position)) {
+                        return undefined;
+                    }
+                    var orientation = Cesium.Property.getValueOrUndefined(entity.orientation, time, orientationScratch);
+                    if (!Cesium.defined(orientation)) {
+                        result = Cesium.Transforms.eastNorthUpToFixedFrame(position, undefined, result);
+                    } else {
+                        result = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromQuaternion(orientation, matrix3Scratch), position, result);
+                    }
+                    return result;
+                }
+
+                var scratch = new Cesium.Matrix4();
+                var camera =  viewer.scene.camera;
+                viewer.scene.preRender.addEventListener(function(){
+                    getModelMatrix(p3Entity, viewer.clock.currentTime, scratch);
+                    camera.lookAtTransform(scratch, new Cesium.Cartesian3(-100000, 20, 90));
+                });
 
                 ///////////////////////////////////////////////////////////
                   
