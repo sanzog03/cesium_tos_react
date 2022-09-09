@@ -12,11 +12,33 @@ import * as Cesium from 'cesium';
 
 class FCXViewer extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentlyShowing: "czml"
+        };
+    }
+
     componentDidMount() {
+        switch(this.state.currentlyShowing) {
+            case "czml":
+                this.startDrawingCZML();
+                break;
+            case "general":
+                this.startDrawing();
+                break;
+            case "pointCloud":
+                this.startDrawingPointCloud();
+                break;
+            default:
+                this.startDrawingCZML();    
+        }
+        let canvasElement = document.getElementsByTagName("canvas")[0];
+        console.log(canvasElement)
+        console.log(window.innerWidth, window.innerHeight)
+        canvasElement.style.height = `${window.innerHeight} px !important`;
+        canvasElement.style.width = `${window.innerWidth} px !important`;
         // dont change states here. will cause double render.
-        // this.startDrawing();
-        // this.startDrawingCZML();
-        this.startDrawingPointCloud();
     }
 
     startDrawing() {
@@ -105,12 +127,40 @@ class FCXViewer extends Component {
     }
 
     startDrawingCZML() {
+
+        // var viewer = new Cesium.Viewer('cesiumContainer');
+        // var baseLayerPickerViewModel = viewer.baseLayerPicker.viewModel;
+        // baseLayerPickerViewModel.selectedImagery = baseLayerPickerViewModel.imageryProviderViewModels[0];
+
+        // var viewer = new Cesium.Viewer('cesiumContainer', {
+        //     imageryProvider : Cesium.createWorldImagery({
+        //         style : Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS
+        //     }),
+        //     baseLayerPicker : false
+        // });
+
         const viewer = new Cesium.Viewer("cesiumContainer", {
-            terrainProvider: Cesium.createWorldTerrain(),
-            shouldAnimate: true,
+            // terrainProvider: Cesium.createWorldTerrain(
+            //     {
+            //     requestWaterMask : true,
+            //     requestVertexNormals : true}
+            // ),
+            shouldAnimate: false,
+            useBrowserRecommendedResolution: true,
+            selectedImageryProviderViewModel: new Cesium.ProviderViewModel({
+                name: "Bing Maps Aerial with Labels",
+                iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/bingAerialLabels.png"),
+                tooltip: "Bing Maps aerial imagery with labels, provided by Cesium ion",
+                category: "Cesium ion",
+                creationFunction: function () {
+                  return Cesium.createWorldImagery({
+                    style: Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS,
+                  })
+                },
+              })
         });
 
-        viewer.extend(Cesium.viewerCesiumInspectorMixin);
+        // viewer.extend(Cesium.viewerCesiumInspectorMixin);
 
         doStuffWithCZML()
 
@@ -120,17 +170,20 @@ class FCXViewer extends Component {
             Cesium.CzmlDataSource.load(dataImpact)
             .then((dataSource) => {
                 viewer.dataSources.add(dataSource);
-                viewer.zoomTo(dataSource);
+
                 let p3Entity = dataSource.entities.getById("Flight Track");
-                viewer.trackedEntity = p3Entity;
                 const clock = viewer.clock;
+                
+                ////////////////////////////////////////
+                // set the camera orientation and keep it far apart from the model.
 
-                // p3Entity.position.setInterpolationOptions({
-                //     interpolationDegree : 5,
-                //     interpolationAlgorithm : Cesium.HermitePolynomialApproximation
-                //     });
+                viewer.zoomTo(dataSource,  new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-10), 40000));
+                // viewer.trackedEntity = p3Entity;
+                // viewer.camera.Zoomout(10000000);
 
-                // change the orientation
+                ///////////////////////////////////////////////////////////
+                  
+                // change the model orientation
                 const heading = Cesium.Math.toRadians(270);
                 const pitch = Cesium.Math.toRadians(90);
                 const roll = Cesium.Math.toRadians(0);
@@ -138,6 +191,7 @@ class FCXViewer extends Component {
                 clock.onTick.addEventListener(() => {
                     const position = p3Entity.position.getValue(clock.currentTime);
                     // the heading should change with respect to the position.
+                    // TODO: if possible get the heading roll and pitch from the czml data itself. But question is when to take which data.
                     const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
                     const orientation = Cesium.Transforms.headingPitchRollQuaternion(
                         position,
@@ -167,7 +221,7 @@ class FCXViewer extends Component {
 
     render() {
       return (
-            <div id="cesiumContainer"></div>
+            <div id="cesiumContainer" style={{width: "100%", height: "100%"}}></div>
       )
     }
 }
