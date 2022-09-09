@@ -29,8 +29,6 @@ class FCXViewer extends Component {
     componentDidMount() {
        Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
        this.implementationHandler();
-    console.warn("changed!!!!!!", this.state.currentlyShowing)
-
     }
 
     implementationHandler() {
@@ -38,14 +36,8 @@ class FCXViewer extends Component {
         // on state change, check which viewer was supposed to be shown
         // remove the previous viewer, and load the new viewer.
         if (this.state.currentViewer) {
-            console.warn("YESSSSSSSSSSS")
             this.state.currentViewer.destroy();
-        } else {
-            console.warn("NOOOOOOOOOOOO")
         }
-
-        console.warn("changed!!!!!!", this.state.currentlyShowing)
-
         switch(this.state.currentlyShowing) {
             case "czml":
                 this.CZMLPathViewer();
@@ -59,7 +51,6 @@ class FCXViewer extends Component {
             default:
                 this.CZMLPathViewer();    
         }
-        console.warn(">>>>", this.state.currentlyShowing)
         // let canvasElement = document.getElementsByTagName("canvas")[0];
         // console.log(canvasElement)
         // console.log(window.innerWidth, window.innerHeight)
@@ -250,21 +241,17 @@ class FCXViewer extends Component {
             url: Cesium.IonResource.fromAssetId(28945),
         });
 
-        console.log(">>>>>", tileset)
         viewer.scene.primitives.add(tileset);
         viewer.zoomTo(tileset);
-        // viewer.trackedEntity = tileset;
     }
 
     handleSelectionChange(event) {
-        console.log("::::::::", event.target.value)
         this.setState({currentlyShowing: event.target.value}, () => {
             this.implementationHandler();
         });
     }
 
     render() {
-    //   this.implementationHandler();
       return (
         <div>
             <div id="cesiumContainer" style={{width: "100%", height: "100%"}}></div>
