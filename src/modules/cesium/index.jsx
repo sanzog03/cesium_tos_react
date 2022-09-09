@@ -15,33 +15,60 @@ class FCXViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentlyShowing: "czml"
+            currentlyShowing: "czml",
+            currentViewer: null
         };
+
+        this.defaultViewer = this.defaultViewer.bind(this);
+        this.CZMLPathViewer = this.CZMLPathViewer.bind(this);
+        this.pointCloudViewer = this.pointCloudViewer.bind(this);
+        this.handleSelectionChange = this.handleSelectionChange.bind(this);
+        this.implementationHandler = this.implementationHandler.bind(this);
     }
 
     componentDidMount() {
+       Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
+       this.implementationHandler();
+    console.warn("changed!!!!!!", this.state.currentlyShowing)
+
+    }
+
+    implementationHandler() {
+        // on initial render, after component mount, show default viewer
+        // on state change, check which viewer was supposed to be shown
+        // remove the previous viewer, and load the new viewer.
+        if (this.state.currentViewer) {
+            console.warn("YESSSSSSSSSSS")
+            this.state.currentViewer.destroy();
+        } else {
+            console.warn("NOOOOOOOOOOOO")
+        }
+
+        console.warn("changed!!!!!!", this.state.currentlyShowing)
+
         switch(this.state.currentlyShowing) {
             case "czml":
-                this.startDrawingCZML();
+                this.CZMLPathViewer();
                 break;
             case "general":
-                this.startDrawing();
+                this.defaultViewer();
                 break;
-            case "pointCloud":
-                this.startDrawingPointCloud();
+            case "point":
+                this.pointCloudViewer();
                 break;
             default:
-                this.startDrawingCZML();    
+                this.CZMLPathViewer();    
         }
-        let canvasElement = document.getElementsByTagName("canvas")[0];
-        console.log(canvasElement)
-        console.log(window.innerWidth, window.innerHeight)
-        canvasElement.style.height = `${window.innerHeight} px !important`;
-        canvasElement.style.width = `${window.innerWidth} px !important`;
+        console.warn(">>>>", this.state.currentlyShowing)
+        // let canvasElement = document.getElementsByTagName("canvas")[0];
+        // console.log(canvasElement)
+        // console.log(window.innerWidth, window.innerHeight)
+        // canvasElement.style.height = `${window.innerHeight} px !important`;
+        // canvasElement.style.width = `${window.innerWidth} px !important`;
         // dont change states here. will cause double render.
     }
 
-    startDrawing() {
+    defaultViewer() {
         Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
         // Add viewer(Camera) with cesium world terrain
         const viewer = new Cesium.Viewer('cesiumContainer', {
@@ -50,6 +77,7 @@ class FCXViewer extends Component {
                 requestVertexNormals : true
             })
         });
+        this.setState({currentViewer: viewer});
 
         // create Cesium OSM buildings
         // const osmBuildings =
@@ -126,7 +154,7 @@ class FCXViewer extends Component {
         play();
     }
 
-    startDrawingCZML() {
+    CZMLPathViewer() {
 
         // var viewer = new Cesium.Viewer('cesiumContainer');
         // var baseLayerPickerViewModel = viewer.baseLayerPicker.viewModel;
@@ -159,6 +187,8 @@ class FCXViewer extends Component {
                 },
               })
         });
+
+        this.setState({currentViewer: viewer});
 
         // viewer.extend(Cesium.viewerCesiumInspectorMixin);
 
@@ -207,12 +237,15 @@ class FCXViewer extends Component {
         }
     }
 
-    startDrawingPointCloud() {   
+    pointCloudViewer() {   
         Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
         const viewer = new Cesium.Viewer("cesiumContainer", {
             terrainProvider: Cesium.createWorldTerrain(),
             shouldAnimate: true,
         });
+
+        this.setState({currentViewer: viewer});
+
         const tileset = new Cesium.Cesium3DTileset({
             url: Cesium.IonResource.fromAssetId(28945),
         });
@@ -223,9 +256,35 @@ class FCXViewer extends Component {
         // viewer.trackedEntity = tileset;
     }
 
+    handleSelectionChange(event) {
+        console.log("::::::::", event.target.value)
+        this.setState({currentlyShowing: event.target.value}, () => {
+            this.implementationHandler();
+        });
+    }
+
     render() {
+    //   this.implementationHandler();
       return (
+        <div>
             <div id="cesiumContainer" style={{width: "100%", height: "100%"}}></div>
+            <div id="toolbar">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Implementations</td>
+                        <td>
+                        <select id="cesiumImplementations" name="cesiumImplementations" value={this.state.currentlyShowing} onChange={this.handleSelectionChange}>
+                            <option value="czml">CZML flight Path Tracking</option>
+                            <option value="general">General Flight Tracking</option>
+                            <option value="point">Point Cloud Plotting</option>
+                        </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
       )
     }
 }
