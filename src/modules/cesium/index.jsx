@@ -31,6 +31,14 @@ class FCXViewer extends Component {
         Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
         this.implementationHandler();
         this.addCustomSelectionToolbar();
+        this.fullScreenViewer();
+    }
+
+    fullScreenViewer() {
+        const canvas = document.querySelector("canvas");
+        const {innerWidth, innerHeight} = window;
+        canvas.height = innerHeight;
+        canvas.width = innerWidth;
     }
 
     addCustomSelectionToolbar() {
