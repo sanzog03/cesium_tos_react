@@ -24,11 +24,20 @@ class FCXViewer extends Component {
         this.pointCloudViewer = this.pointCloudViewer.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.implementationHandler = this.implementationHandler.bind(this);
+        this.addCustomSelectionToolbar = this.addCustomSelectionToolbar.bind(this);
     }
 
     componentDidMount() {
-       Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
-       this.implementationHandler();
+        Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
+        this.implementationHandler();
+        this.addCustomSelectionToolbar();
+    }
+
+    addCustomSelectionToolbar() {
+       const toolbar = document.querySelector("div.cesium-viewer-toolbar");
+       const customSelectionTool = document.querySelector("#customSelectionTool");
+       toolbar.appendChild(customSelectionTool);
+       // only added toobar initially. TODO: find a way to add toolbar later, when the current viewer changes.
     }
 
     implementationHandler() {
@@ -51,6 +60,7 @@ class FCXViewer extends Component {
             default:
                 this.CZMLPathViewer();    
         }
+
         // let canvasElement = document.getElementsByTagName("canvas")[0];
         // console.log(canvasElement)
         // console.log(window.innerWidth, window.innerHeight)
@@ -127,7 +137,7 @@ class FCXViewer extends Component {
         async function play() {
             // add 3d model
             // const airPlaneModel = await Cesium.IonResource.fromAssetId(1284311);
-            const airPlaneModel = "https://fcx-czml.s3.amazonaws.com/img/p3.gltf";
+            const airPlaneModel = "https://fcx-czml.s3.amazonaws.com/img/er2.gltf";
 
             // Interpolate the points (position wrt to time)
             const airPlaneEntity = viewer.entities.add({
@@ -255,7 +265,7 @@ class FCXViewer extends Component {
       return (
         <div>
             <div id="cesiumContainer" style={{width: "100%", height: "100%"}}></div>
-            <div id="toolbar">
+            <div id="customSelectionTool">
             <table>
                 <tbody>
                     <tr>
@@ -276,5 +286,5 @@ class FCXViewer extends Component {
     }
 }
   
-  export default FCXViewer;
+export default FCXViewer;
   
