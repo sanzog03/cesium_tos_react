@@ -1,35 +1,35 @@
-import * as Cesium from 'cesium';
+import { Viewer, createWorldImagery, IonWorldImageryStyle, createWorldTerrain, ProviderViewModel, buildModuleUrl, viewerCesiumInspectorMixin, CzmlDataSource, HeadingPitchRange, Math, HeadingPitchRoll, Transforms } from 'cesium';
 import impactData from "../datas/impactData.czml";
 
 export default function CZMLPathViewer(setCurrentViewer) {
 
-    // var viewer = new Cesium.Viewer('cesiumContainer');
+    // var viewer = new Viewer('cesiumContainer');
     // var baseLayerPickerViewModel = viewer.baseLayerPicker.viewModel;
     // baseLayerPickerViewModel.selectedImagery = baseLayerPickerViewModel.imageryProviderViewModels[0];
 
-    // var viewer = new Cesium.Viewer('cesiumContainer', {
-    //     imageryProvider : Cesium.createWorldImagery({
-    //         style : Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS
+    // var viewer = new Viewer('cesiumContainer', {
+    //     imageryProvider : createWorldImagery({
+    //         style : IonWorldImageryStyle.AERIAL_WITH_LABELS
     //     }),
     //     baseLayerPicker : false
     // });
 
-    const viewer = new Cesium.Viewer("cesiumContainer", {
-        // terrainProvider: Cesium.createWorldTerrain(
+    const viewer = new Viewer("cesiumContainer", {
+        // terrainProvider: createWorldTerrain(
         //     {
         //     requestWaterMask : true,
         //     requestVertexNormals : true}
         // ),
         shouldAnimate: false,
         useBrowserRecommendedResolution: true,
-        selectedImageryProviderViewModel: new Cesium.ProviderViewModel({
+        selectedImageryProviderViewModel: new ProviderViewModel({
             name: "Bing Maps Aerial with Labels",
-            iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/bingAerialLabels.png"),
+            iconUrl: buildModuleUrl("Widgets/Images/ImageryProviders/bingAerialLabels.png"),
             tooltip: "Bing Maps aerial imagery with labels, provided by Cesium ion",
             category: "Cesium ion",
             creationFunction: function () {
-              return Cesium.createWorldImagery({
-                style: Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS,
+              return createWorldImagery({
+                style: IonWorldImageryStyle.AERIAL_WITH_LABELS,
               })
             },
           })
@@ -37,14 +37,14 @@ export default function CZMLPathViewer(setCurrentViewer) {
 
     setCurrentViewer(viewer);
 
-    // viewer.extend(Cesium.viewerCesiumInspectorMixin);
+    // viewer.extend(viewerCesiumInspectorMixin);
 
     doStuffWithCZML()
 
     function doStuffWithCZML() {
-        // Cesium.CzmlDataSource.load("./testData.czml")
-        // Cesium.CzmlDataSource.load("https://fcx-czml.s3.amazonaws.com/flight_track/goesrplt_naver2_IWG1_20170322-0136")
-        Cesium.CzmlDataSource.load(impactData)
+        // CzmlDataSource.load("./testData.czml")
+        // CzmlDataSource.load("https://fcx-czml.s3.amazonaws.com/flight_track/goesrplt_naver2_IWG1_20170322-0136")
+        CzmlDataSource.load(impactData)
         .then(async (dataSource) => {
             viewer.dataSources.add(dataSource);
             const clock = viewer.clock;
@@ -53,11 +53,11 @@ export default function CZMLPathViewer(setCurrentViewer) {
             // set the camera orientation and keep it far apart from the model.
 
             // a fly to is much better than zoom to.
-            viewer.zoomTo(dataSource,  new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-10), 40000));
-            // await viewer.flyTo(p3Entity, {offset: new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-10), 40000)})
+            viewer.zoomTo(dataSource,  new HeadingPitchRange(0, Math.toRadians(-10), 40000));
+            // await viewer.flyTo(p3Entity, {offset: new HeadingPitchRange(0, Math.toRadians(-10), 40000)})
 
             // viewer.camera.Zoomout(10000000);
-            // viewer.camera.setView({ destination: p3Entity, orientation: new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-10), 40000)})
+            // viewer.camera.setView({ destination: p3Entity, orientation: new HeadingPitchRange(0, Math.toRadians(-10), 40000)})
 
             viewer.trackedEntity = p3Entity;
 
@@ -67,14 +67,14 @@ export default function CZMLPathViewer(setCurrentViewer) {
 
             function fixOrientation() {
                 // change the model orientation
-                const heading = Cesium.Math.toRadians(270);
-                const pitch = Cesium.Math.toRadians(90);
-                const roll = Cesium.Math.toRadians(0);
+                const heading = Math.toRadians(270);
+                const pitch = Math.toRadians(90);
+                const roll = Math.toRadians(0);
                 const position = p3Entity.position.getValue(clock.currentTime);
                     // the heading should change with respect to the position.
                     // TODO: if possible get the heading roll and pitch from the czml data itself. But question is when to take which data.
-                    const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
-                    const orientation = Cesium.Transforms.headingPitchRollQuaternion(
+                    const hpr = new HeadingPitchRoll(heading, pitch, roll);
+                    const orientation = Transforms.headingPitchRollQuaternion(
                         position,
                         hpr
                     );
