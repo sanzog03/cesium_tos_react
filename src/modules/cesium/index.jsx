@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import flightDataRaw from "./flightData.js";
 import dataImpact from "./impactData.czml";
+import defaultViewer from "./viewers/default.js";
+import * as Cesium from 'cesium';
 
 // The URL on your server where CesiumJS's static files are hosted.
 window.CESIUM_BASE_URL = '/';
-
-// eslint-disable-next-line import/first
-import * as Cesium from 'cesium';
-
-// import "cesium/Build/Cesium/Widgets/widgets.css";
 
 class FCXViewer extends Component {
 
@@ -24,6 +21,7 @@ class FCXViewer extends Component {
         this.pointCloudViewer = this.pointCloudViewer.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.implementationHandler = this.implementationHandler.bind(this);
+        this.setCurrentViewer = this.setCurrentViewer.bind(this);
     }
 
     componentDidMount() {
@@ -43,7 +41,7 @@ class FCXViewer extends Component {
                 this.CZMLPathViewer();
                 break;
             case "general":
-                this.defaultViewer();
+                defaultViewer(this.setCurrentViewer);
                 break;
             case "point":
                 this.pointCloudViewer();
@@ -243,6 +241,10 @@ class FCXViewer extends Component {
         this.setState({currentlyShowing: event.target.value}, () => {
             this.implementationHandler();
         });
+    }
+
+    setCurrentViewer(viewer){
+        this.setState({currentViewer: viewer});
     }
 
     render() {
