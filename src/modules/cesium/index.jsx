@@ -4,8 +4,8 @@ import defaultViewer from "./viewers/default";
 import CZMLPathViewer from "./viewers/czmlPathViewer";
 import pointCloudViewer from "./viewers/pointCloudViewer";
 
-// The URL on your server where CesiumJS's static files are hosted.
-window.CESIUM_BASE_URL = '/';
+// // The URL on your server where CesiumJS's static files are hosted.
+// window.CESIUM_BASE_URL = '/';
 
 class FCXViewer extends Component {
     constructor(props) {

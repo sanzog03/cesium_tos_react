@@ -1,16 +1,15 @@
-import * as Cesium from 'cesium';
+import { Viewer ,createWorldTerrain ,Cesium3DTileset ,IonResource } from 'cesium';
 
 export default function pointCloudViewer(setCurrentViewer) {   
-    Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
-    const viewer = new Cesium.Viewer("cesiumContainer", {
-        terrainProvider: Cesium.createWorldTerrain(),
+    const viewer = new Viewer("cesiumContainer", {
+        terrainProvider: createWorldTerrain(),
         shouldAnimate: true,
     });
 
     setCurrentViewer(viewer);
 
-    const tileset = new Cesium.Cesium3DTileset({
-        url: Cesium.IonResource.fromAssetId(28945),
+    const tileset = new Cesium3DTileset({
+        url: IonResource.fromAssetId(28945),
     });
 
     viewer.scene.primitives.add(tileset);
