@@ -1,13 +1,12 @@
-import * as Cesium from 'cesium';
+import { Viewer, createWorldTerrain, createOsmBuildings, JulianDate, SampledPositionProperty, Cartesian3, TimeIntervalCollection, TimeInterval, VelocityOrientationProperty, PathGraphics } from 'cesium';
 import flightDataRaw from "../datas/default";
 
 export default function defaultViewer(setCurrentViewer) {
-    Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
     // Add viewer(Camera) with cesium world terrain
-    const viewer = new Cesium.Viewer('cesiumContainer', {
-        terrainProvider: Cesium.createWorldTerrain({
-            requestWaterMask : true,
-            requestVertexNormals : true
+    const viewer = new Viewer('cesiumContainer', {
+        terrainProvider: createWorldTerrain({
+            requestWaterMask: true,
+            requestVertexNormals: true
         })
     });
     // this.setState({currentViewer: viewer});
@@ -15,8 +14,8 @@ export default function defaultViewer(setCurrentViewer) {
 
     // create Cesium OSM buildings
     // const osmBuildings =
-    viewer.scene.primitives.add(Cesium.createOsmBuildings());
-    
+    viewer.scene.primitives.add(createOsmBuildings());
+
     //// Arrange below code to following sections.
     // createViewer();
     // addOSMBuildings();
@@ -35,8 +34,8 @@ export default function defaultViewer(setCurrentViewer) {
     */
     const timeStepsInSecond = 30;
     const totalSeconds = timeStepsInSecond * flightData.length - 1;
-    const startTime = Cesium.JulianDate.fromIso8601("2022-08-24T23:10:00Z");
-    const endTime = Cesium.JulianDate.addSeconds(startTime, totalSeconds, new Cesium.JulianDate());
+    const startTime = JulianDate.fromIso8601("2022-08-24T23:10:00Z");
+    const endTime = JulianDate.addSeconds(startTime, totalSeconds, new JulianDate());
 
     /** VIEWER TIME MANIPULATION **/
 
@@ -53,15 +52,15 @@ export default function defaultViewer(setCurrentViewer) {
     /** TRACKING POSITION AND TIME DATE (SPATIAL AND TEMPORAL DATA) using "sampled position property" **/
 
     // The SampledPositionedProperty stores the position and timestamp for each sample along the radar sample series.
-    const positionProperty = new Cesium.SampledPositionProperty();
+    const positionProperty = new SampledPositionProperty();
 
     // For all flightData
     for (let i = 0; i < flightData.length; i++) {
         const dataPoint = flightData[i];
-        
+
         // formulate position and its corresponding time
-        const time = Cesium.JulianDate.addSeconds(startTime, i * timeStepsInSecond, new Cesium.JulianDate());
-        const position = Cesium.Cartesian3.fromDegrees(dataPoint.longitude, dataPoint.latitude, dataPoint.height);
+        const time = JulianDate.addSeconds(startTime, i * timeStepsInSecond, new JulianDate());
+        const position = Cartesian3.fromDegrees(dataPoint.longitude, dataPoint.latitude, dataPoint.height);
 
         // mix position and time property
         positionProperty.addSample(time, position);
@@ -69,17 +68,17 @@ export default function defaultViewer(setCurrentViewer) {
 
     async function play() {
         // add 3d model
-        // const airPlaneModel = await Cesium.IonResource.fromAssetId(1284311);
+        // const airPlaneModel = await IonResource.fromAssetId(1284311);
         const airPlaneModel = "https://fcx-czml.s3.amazonaws.com/img/er2.gltf";
 
         // Interpolate the points (position wrt to time)
         const airPlaneEntity = viewer.entities.add({
-            availability: new Cesium.TimeIntervalCollection([ new Cesium.TimeInterval({ start: startTime, stop: endTime }) ]),
+            availability: new TimeIntervalCollection([new TimeInterval({ start: startTime, stop: endTime })]),
             position: positionProperty,
-            point: {pixelSize: 30},
-            model: {uri: airPlaneModel, scale: 0.1},
-            orientation: new Cesium.VelocityOrientationProperty(positionProperty),
-            path: new Cesium.PathGraphics({width: 3})
+            point: { pixelSize: 30 },
+            model: { uri: airPlaneModel, scale: 0.1 },
+            orientation: new VelocityOrientationProperty(positionProperty),
+            path: new PathGraphics({ width: 3 })
         });
 
         // make viewer camera track the moving entity
