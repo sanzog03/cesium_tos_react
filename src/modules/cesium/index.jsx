@@ -24,28 +24,11 @@ class FCXViewer extends Component {
         this.pointCloudViewer = this.pointCloudViewer.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.implementationHandler = this.implementationHandler.bind(this);
-        this.addCustomSelectionToolbar = this.addCustomSelectionToolbar.bind(this);
     }
 
     componentDidMount() {
         Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
         this.implementationHandler();
-        this.addCustomSelectionToolbar();
-        this.fullScreenViewer();
-    }
-
-    fullScreenViewer() {
-        const canvas = document.querySelector("canvas");
-        const {innerWidth, innerHeight} = window;
-        canvas.height = innerHeight;
-        canvas.width = innerWidth;
-    }
-
-    addCustomSelectionToolbar() {
-       const toolbar = document.querySelector("div.cesium-viewer-toolbar");
-       const customSelectionTool = document.querySelector("#customSelectionTool");
-       toolbar.appendChild(customSelectionTool);
-       // only added toobar initially. TODO: find a way to add toolbar later, when the current viewer changes.
     }
 
     implementationHandler() {
@@ -68,13 +51,6 @@ class FCXViewer extends Component {
             default:
                 this.CZMLPathViewer();    
         }
-
-        // let canvasElement = document.getElementsByTagName("canvas")[0];
-        // console.log(canvasElement)
-        // console.log(window.innerWidth, window.innerHeight)
-        // canvasElement.style.height = `${window.innerHeight} px !important`;
-        // canvasElement.style.width = `${window.innerWidth} px !important`;
-        // dont change states here. will cause double render.
     }
 
     defaultViewer() {
