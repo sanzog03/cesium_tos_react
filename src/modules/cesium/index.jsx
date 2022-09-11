@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import * as Cesium from 'cesium';
-import defaultViewer from "./viewers/default.js";
-import CZMLPathViewer from "./viewers/czmlPathViewer.js";
+import defaultViewer from "./viewers/default";
+import CZMLPathViewer from "./viewers/czmlPathViewer";
+import pointCloudViewer from "./viewers/pointCloudViewer";
 
 // The URL on your server where CesiumJS's static files are hosted.
 window.CESIUM_BASE_URL = '/';
@@ -15,7 +16,7 @@ class FCXViewer extends Component {
             currentViewer: null
         };
 
-        this.pointCloudViewer = this.pointCloudViewer.bind(this);
+        // this.pointCloudViewer = this.pointCloudViewer.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.implementationHandler = this.implementationHandler.bind(this);
         this.setCurrentViewer = this.setCurrentViewer.bind(this);
@@ -41,29 +42,29 @@ class FCXViewer extends Component {
                 defaultViewer(this.setCurrentViewer);
                 break;
             case "point":
-                this.pointCloudViewer();
+                pointCloudViewer(this.setCurrentViewer);
                 break;
             default:
                 CZMLPathViewer(this.setCurrentViewer); 
         }
     }
 
-    pointCloudViewer() {   
-        Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
-        const viewer = new Cesium.Viewer("cesiumContainer", {
-            terrainProvider: Cesium.createWorldTerrain(),
-            shouldAnimate: true,
-        });
+    // pointCloudViewer() {   
+    //     Cesium.Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_DEFAULT_ACCESS_TOKEN;
+    //     const viewer = new Cesium.Viewer("cesiumContainer", {
+    //         terrainProvider: Cesium.createWorldTerrain(),
+    //         shouldAnimate: true,
+    //     });
 
-        this.setState({currentViewer: viewer});
+    //     this.setState({currentViewer: viewer});
 
-        const tileset = new Cesium.Cesium3DTileset({
-            url: Cesium.IonResource.fromAssetId(28945),
-        });
+    //     const tileset = new Cesium.Cesium3DTileset({
+    //         url: Cesium.IonResource.fromAssetId(28945),
+    //     });
 
-        viewer.scene.primitives.add(tileset);
-        viewer.zoomTo(tileset);
-    }
+    //     viewer.scene.primitives.add(tileset);
+    //     viewer.zoomTo(tileset);
+    // }
 
     handleSelectionChange(event) {
         this.setState({currentlyShowing: event.target.value}, () => {
