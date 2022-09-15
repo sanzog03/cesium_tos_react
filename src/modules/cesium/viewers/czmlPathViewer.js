@@ -44,6 +44,7 @@ export default function CZMLPathViewer(setCurrentViewer) {
             // await viewer.flyTo(p3Entity, {offset: new HeadingPitchRange(0, Math.toRadians(-10), 40000)})
 
             viewer.zoomTo(dataSource,  new HeadingPitchRange(0, Math.toRadians(-10), 40000));
+            p3Entity.viewFrom = new Cartesian3(-30000, -70000, 50000);
 
             // camera zooming
             // set the camera orientation and keep it far apart from the model.
