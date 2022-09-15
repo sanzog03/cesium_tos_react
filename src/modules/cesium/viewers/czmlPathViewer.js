@@ -1,5 +1,5 @@
-import { Viewer, createWorldImagery, IonWorldImageryStyle, createWorldTerrain, ProviderViewModel, buildModuleUrl, viewerCesiumInspectorMixin, CzmlDataSource, HeadingPitchRange, Math, HeadingPitchRoll, Transforms, CallbackProperty } from 'cesium';
-import impactData from "../datas/impactData.czml";
+import { Viewer, createWorldImagery, IonWorldImageryStyle, createWorldTerrain, ProviderViewModel, buildModuleUrl, viewerCesiumInspectorMixin, CzmlDataSource, HeadingPitchRange, Math, HeadingPitchRoll, Transforms, CallbackProperty, UrlTemplateImageryProvider } from 'cesium';
+import impactData from "../datas/impactEr2.czml";
 
 export default function CZMLPathViewer(setCurrentViewer) {
 
