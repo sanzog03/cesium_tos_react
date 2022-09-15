@@ -58,11 +58,13 @@ export default function CZMLPathViewer(setCurrentViewer) {
 
             function fixOrientation(entity, time) {
                 const position = entity.position.getValue(time);
-                let { heading, pitch, roll } = entity.properties.getValue(time);
+                console.log(">>", entity.properties.getValue(time));
+                let { heading, pitch, roll, correctionOffsets } = entity.properties.getValue(time);
                 // only the heading should change with respect to the position.
                 // fix the pitch and roll rotations
-                pitch = Math.toRadians(90);
-                roll = Math.toRadians(90);
+                heading = heading + Math.toRadians(correctionOffsets.heading);
+                pitch = pitch + Math.toRadians(correctionOffsets.pitch);
+                roll = roll + Math.toRadians(correctionOffsets.roll);
                 const hpr = new HeadingPitchRoll(heading, pitch, roll);
                 const fixedOrientation = Transforms.headingPitchRollQuaternion(
                     position,
