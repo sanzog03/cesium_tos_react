@@ -27,7 +27,7 @@ export default function pointCloudViewer(setCurrentViewer) {
     //     clockStep : Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER
     //  });
 
-     var currentTime = Cesium.JulianDate.fromIso8601("2017-05-17T04:00:00.09Z")
+     var currentTime = Cesium.JulianDate.fromIso8601("2017-05-17T02:23:33Z")
      var endTime = Cesium.JulianDate.fromIso8601("2017-05-18");
 
      viewer.clock.currentTime = currentTime;
