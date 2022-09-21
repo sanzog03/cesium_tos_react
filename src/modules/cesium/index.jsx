@@ -4,6 +4,7 @@ import defaultViewer from "./viewers/default";
 import CZMLPathViewer from "./viewers/czmlPathViewer";
 import pointCloudViewer from "./viewers/pointCloudViewer";
 import pointPrimitiveViewer from "./viewers/pointPrimitiveViewer";
+import wmtsViewer from "./viewers/wmtsViewer";
 
 // // The URL on your server where CesiumJS's static files are hosted.
 // window.CESIUM_BASE_URL = '/';
@@ -45,6 +46,9 @@ class FCXViewer extends Component {
             case "pointPrimitive":
                 pointPrimitiveViewer(this.setCurrentViewer);
                 break;
+            case "wmts":
+                wmtsViewer(this.setCurrentViewer);
+                break;
             default:
                 CZMLPathViewer(this.setCurrentViewer); 
         }
@@ -75,6 +79,7 @@ class FCXViewer extends Component {
                             <option value="general">General Flight Tracking</option>
                             <option value="point">Point Cloud Plotting</option>
                             <option value="pointPrimitive"> point primitive collection </option>
+                            <option value="wmts"> web map tile service viewer </option>
                         </select>
                         </td>
                     </tr>
