@@ -13,7 +13,7 @@ class FCXViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentlyShowing: "wmts",
+            currentlyShowing: "czml",
             currentViewer: null
         };
         this.handleSelectionChange = this.handleSelectionChange.bind(this);

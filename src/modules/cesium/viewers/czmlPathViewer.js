@@ -1,6 +1,9 @@
 import { Viewer, createWorldImagery, IonWorldImageryStyle, createWorldTerrain, ProviderViewModel, buildModuleUrl, viewerCesiumInspectorMixin, CzmlDataSource, HeadingPitchRange, Math, HeadingPitchRoll, Transforms, CallbackProperty, UrlTemplateImageryProvider, Cartesian3 } from 'cesium';
 // import impactData from "../datas/impactEr2.czml";
-import impactData from "../datas/impactData.czml";
+// import impactData from "../datas/impactData.czml";
+// import impactData from "../datas/CZMLS_FCX_05172017/czml/IMPACTS_MetNav_P3B_20200205_R0.czml"
+import impactData from "../datas/CZMLS_FCX_05172017/czml/LIP_subset.czml"
+// import impactData from "../datas/CZMLS_FCX_05172017/czml/LIP.czml"
 
 export default function CZMLPathViewer(setCurrentViewer) {
 
@@ -64,6 +67,13 @@ export default function CZMLPathViewer(setCurrentViewer) {
                 let { heading, pitch, roll, correctionOffsets, sanjog } = entity.properties.getValue(time);
                 // only the heading should change with respect to the position.
                 // console.log()
+                if(!correctionOffsets) {
+                    correctionOffsets = {
+                        heading: 0,
+                        pitch: 0,
+                        roll: 0
+                    }
+                }
                 // fix the pitch and roll rotations
                 heading = heading + Math.toRadians(correctionOffsets.heading);
                 pitch = pitch + Math.toRadians(correctionOffsets.pitch);
