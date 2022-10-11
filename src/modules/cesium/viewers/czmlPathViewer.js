@@ -2,7 +2,8 @@ import { Viewer, createWorldImagery, IonWorldImageryStyle, createWorldTerrain, P
 // import impactData from "../datas/impactEr2.czml";
 // import impactData from "../datas/impactData.czml";
 // import impactData from "../datas/CZMLS_FCX_05172017/czml/IMPACTS_MetNav_P3B_20200205_R0.czml"
-import impactData from "../datas/CZMLS_FCX_05172017/czml/LIP_subset.czml"
+// import impactData from "../datas/CZMLS_FCX_05172017/czml/LIP_subset.czml"
+import impactData from "../datas/CZMLS_FCX_05172017/czml/FEGS_FLASH_subset.czml"
 // import impactData from "../datas/CZMLS_FCX_05172017/czml/LIP.czml"
 
 export default function CZMLPathViewer(setCurrentViewer) {
