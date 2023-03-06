@@ -1,5 +1,5 @@
 import { Viewer, createWorldTerrain, createOsmBuildings, JulianDate, SampledPositionProperty, Cartesian3, TimeIntervalCollection, TimeInterval, VelocityOrientationProperty, PathGraphics } from 'cesium';
-import flightDataRaw from "../datas/default";
+import flightDataRaw from "../datas/old/default";
 
 export default function defaultViewer(setCurrentViewer) {
     // Add viewer(Camera) with cesium world terrain
