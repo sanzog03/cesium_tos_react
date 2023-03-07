@@ -22,11 +22,117 @@ export default function imageryProviderViewer(setCurrentViewer) {
     //   baseLayerPicker: false,
     });
 
+    // setting time of cesium
+    let start = Cesium.JulianDate.fromIso8601("2015-09-22T22:28:00Z");
+    let stop = Cesium.JulianDate.fromIso8601("2015-09-22T23:59:00Z");
+    const clock = viewer.clock;
+    clock.startTime = start;
+    clock.currentTime = start;
+    clock.stopTime = stop;
+
+
     setCurrentViewer(viewer);
-    imageryViewer(viewer);
+
+    // let timeIntervalCollection = timeDynamicData(viewer);
+    // imageryViewer(viewer, timeIntervalCollection);
+    imageViewerCZML(viewer);
 }
 
-function imageryViewer(viewer) {
+function imageViewerCZML(viewer) {
+  const czml = [
+    {
+      id: "document",
+      name: "CZML Geometries: Rectangle",
+      version: "1.0",
+    },
+    {
+      id: "textureRectangle",
+      name: "rectangle with image, above surface",
+      rectangle: {
+        coordinates: {
+          wsenDegrees: [-123.197, 48.735, -121.812, 49.653],
+        },
+        height: 0,
+        fill: true,
+        material: {
+          image: {
+            image: { uri: "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2229_ELEV_01.png" },
+            color: {
+              rgba: [255, 255, 255, 128],
+            },
+          },
+        },
+      },
+    },
+  ];
+  
+  const dataSourcePromise = Cesium.CzmlDataSource.load(czml);
+  viewer.dataSources.add(dataSourcePromise);
+  viewer.zoomTo(dataSourcePromise);
+  
+  
+}
+
+function timeDynamicData(viewer) {
+  const dates = [
+    "2015-09-22T22:29:00Z",
+    "2015-09-22T22:38:00Z",
+    "2015-09-22T22:48:00Z",
+    "2015-09-22T22:58:00Z",
+    "2015-09-22T23:07:00Z",
+    "2015-09-22T23:17:00Z",
+    "2015-09-22T23:27:00Z",
+    "2015-09-22T23:37:00Z",
+    "2015-09-22T23:46:00Z",
+    "2015-09-22T23:58:00Z",
+  ];
+  
+  const uris = [
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2229_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2238_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2248_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2258_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2307_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2317_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2327_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2337_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2346_ELEV_01.png",
+    "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2358_ELEV_01.png",
+  ];
+  
+  function dataCallback(interval, index) {
+      console.log("::::::::::::::::", index)
+      let spatialCoverage = {W: -123.197, S: 48.735, E: -121.812, N: 49.653}
+      let rectangle = Cesium.Rectangle.fromDegrees(spatialCoverage.W, spatialCoverage.S, spatialCoverage.E, spatialCoverage.N);
+      let layers = viewer.scene.imageryLayers;
+
+      layers.addImageryProvider(
+      new Cesium.SingleTileImageryProvider({
+      //   url: "../datas/CZMLS_FCX_05172017/nexrad/olympex_Level2_KATX_20150922_2229_ELEV_01.png",
+        url: uris[index],
+      //   rectangle: Cesium.Rectangle.fromDegrees(-75.0, 28.0, -67.0, 29.75),
+      //   rectangle: Cesium.Rectangle.fromDegrees(114.591,-45.837,148.97,-5.73),// australia
+      // Cesium.Rectangle.fromDegrees(west, south, east, north, result) → Rectangle
+        rectangle
+      })
+    );
+
+
+    return {
+      uri: uris[index],
+    };
+  }
+  
+  const timeIntervalCollection = Cesium.TimeIntervalCollection.fromIso8601DateArray(
+    {
+      iso8601Dates: dates,
+      dataCallback: dataCallback,
+    }
+  );
+  return timeIntervalCollection;
+}
+
+function imageryViewer(viewer, timeIntervalCollection) {
       const layers = viewer.scene.imageryLayers;
       const blackMarble = layers.addImageryProvider(
         new Cesium.IonImageryProvider({ assetId: 3812 })
@@ -36,17 +142,35 @@ function imageryViewer(viewer) {
       
       blackMarble.brightness = 2.0;
       
-      let spatialCoverage = {N: 49.653, S: 48.735, E: -121.812, W: -123.197}
-      layers.addImageryProvider(
-        new Cesium.SingleTileImageryProvider({
-        //   url: "../datas/CZMLS_FCX_05172017/nexrad/olympex_Level2_KATX_20150922_2229_ELEV_01.png",
-          url: img,
-        //   rectangle: Cesium.Rectangle.fromDegrees(-75.0, 28.0, -67.0, 29.75),
-        //   rectangle: Cesium.Rectangle.fromDegrees(114.591,-45.837,148.97,-5.73),// australia
-        // Cesium.Rectangle.fromDegrees(west, south, east, north, result) → Rectangle
-          rectangle: Cesium.Rectangle.fromDegrees(spatialCoverage.W, spatialCoverage.S, spatialCoverage.E, spatialCoverage.N)
-        })
-      ); 
+      // adding the imagery layer to the viewer scene.
+      
+      // let spatialCoverage = {N: 49.653, S: 48.735, E: -121.812, W: -123.197}
+      // let rectangle = Cesium.Rectangle.fromDegrees(spatialCoverage.W, spatialCoverage.S, spatialCoverage.E, spatialCoverage.N);
+
+      let timeDynamicImageryProviderInstance = new Cesium.TimeDynamicImagery({
+        times: timeIntervalCollection,
+        clock: viewer.clock,
+        requestImageFunction: function() {
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!! Requeusting new image in progress.")
+        },
+        reloadFunction: function() {
+          console.log("--------------------------- Requeusting RELOAD in progress.")
+       
+        }
+      })
+
+      layers.addImageryProvider(timeDynamicImageryProviderInstance);
+
+      // layers.addImageryProvider(
+      //   new Cesium.SingleTileImageryProvider({
+      //   //   url: "../datas/CZMLS_FCX_05172017/nexrad/olympex_Level2_KATX_20150922_2229_ELEV_01.png",
+      //     url: img,
+      //   //   rectangle: Cesium.Rectangle.fromDegrees(-75.0, 28.0, -67.0, 29.75),
+      //   //   rectangle: Cesium.Rectangle.fromDegrees(114.591,-45.837,148.97,-5.73),// australia
+      //   // Cesium.Rectangle.fromDegrees(west, south, east, north, result) → Rectangle
+      //     rectangle
+      //   })
+      // ); 
 }
 
 
