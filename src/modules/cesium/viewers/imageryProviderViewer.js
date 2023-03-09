@@ -39,7 +39,7 @@ export default function imageryProviderViewer(setCurrentViewer) {
 }
 
 function imageViewerCZML(viewer) {  
-  const dataSourcePromise = Cesium.CzmlDataSource.load("https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/nexrad/katx/olympex_Level2_KRTX_20160430.czml");
+  const dataSourcePromise = Cesium.CzmlDataSource.load("https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/nexrad/katx/olympex_Level2_20160430.czml");
   viewer.dataSources.add(dataSourcePromise);
   viewer.zoomTo(dataSourcePromise);
   
