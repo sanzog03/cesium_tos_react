@@ -23,8 +23,8 @@ export default function imageryProviderViewer(setCurrentViewer) {
     });
 
     // setting time of cesium
-    let start = Cesium.JulianDate.fromIso8601("2015-09-22T22:28:00Z");
-    let stop = Cesium.JulianDate.fromIso8601("2015-09-22T23:59:00Z");
+    let start = Cesium.JulianDate.fromIso8601("2016-04-30T00:02:00Z");
+    let stop = Cesium.JulianDate.fromIso8601("2016-04-30T23:56:00Z");
     const clock = viewer.clock;
     clock.startTime = start;
     clock.currentTime = start;
@@ -38,61 +38,8 @@ export default function imageryProviderViewer(setCurrentViewer) {
     imageViewerCZML(viewer);
 }
 
-function imageViewerCZML(viewer) {
-  const czml = [
-    {
-      id: "document",
-      name: "CZML Geometries: Rectangle",
-      version: "1.0",
-      clock: {
-        interval: "2015-09-22T22:28:00Z/2015-09-22T23:58:00Z",
-        currentTime: "2015-09-22T22:28:00Z",
-        multiplier: 20,
-      },
-    },
-    {
-      id: "textureRectangle1",
-      name: "rectangle with image, above surface",
-      availability: "2015-09-22T22:29:00Z/2015-09-22T22:38:00Z",
-      rectangle: {
-        coordinates: {
-          wsenDegrees: [-123.197, 48.735, -121.812, 49.653],
-        },
-        height: 0,
-        fill: true,
-        material: {
-          image: {
-            image: { uri: "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2229_ELEV_01.png" },
-            color: {
-              rgba: [255, 255, 255, 128],
-            },
-          },
-        },
-      },
-    },
-    {
-      id: "textureRectangle2",
-      name: "rectangle with image, above surface",
-      availability: "2015-09-22T22:38:00Z/2015-09-22T22:48:00Z",
-      rectangle: {
-        coordinates: {
-          wsenDegrees: [-123.197, 48.735, -121.812, 49.653],
-        },
-        height: 0,
-        fill: true,
-        material: {
-          image: {
-            image: { uri: "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-raw-data/nexrad/katx/2015-09-22/olympex_Level2_KATX_20150922_2238_ELEV_01.png", },
-            color: {
-              rgba: [255, 255, 255, 128],
-            },
-          },
-        },
-      },
-    },
-  ];
-  
-  const dataSourcePromise = Cesium.CzmlDataSource.load(czml);
+function imageViewerCZML(viewer) {  
+  const dataSourcePromise = Cesium.CzmlDataSource.load("https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/nexrad/katx/olympex_Level2_KRTX_20160430.czml");
   viewer.dataSources.add(dataSourcePromise);
   viewer.zoomTo(dataSourcePromise);
   
