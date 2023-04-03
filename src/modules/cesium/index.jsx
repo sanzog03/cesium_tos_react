@@ -6,6 +6,7 @@ import pointCloudViewer from "./viewers/pointCloudViewer";
 import pointPrimitiveViewer from "./viewers/pointPrimitiveViewer";
 import wmtsViewer from "./viewers/wmtsViewer";
 import imageryViewer from "./viewers/imageryProviderViewer";
+import tilesCzmlViewer from "./viewers/tilesInCZMLViewer";
 
 // // The URL on your server where CesiumJS's static files are hosted.
 // window.CESIUM_BASE_URL = '/';
@@ -14,7 +15,7 @@ class FCXViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentlyShowing: "imagery",
+            currentlyShowing: "tilesInCzml",
             currentViewer: null
         };
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
@@ -53,6 +54,9 @@ class FCXViewer extends Component {
             case "imagery":
                 imageryViewer(this.setCurrentViewer);
                 break;
+            case "tilesInCzml":
+                tilesCzmlViewer(this.setCurrentViewer);
+                break;
             default:
                 CZMLPathViewer(this.setCurrentViewer); 
         }
@@ -85,6 +89,7 @@ class FCXViewer extends Component {
                             <option value="pointPrimitive"> point primitive collection </option>
                             <option value="wmts"> web map tile service viewer </option>
                             <option value="imagery"> Imagery Provider viewer (nexrad) </option>
+                            <option value="tilesInCzml"> 3d tiles inside czml (npol) </option>
                         </select>
                         </td>
                     </tr>
