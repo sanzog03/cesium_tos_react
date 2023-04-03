@@ -35,20 +35,57 @@ const czml = [
       id: "document",
       version: "1.0",
       clock: {
-        interval: "2015-12-03T00:00:00Z/2015-12-03T01:00:00Z",
+        interval: "2015-12-03T00:00:00Z/2015-12-03T02:00:00Z",
         currentTime: "2015-12-03T00:00:00Z",
         multiplier: 16,
       },
     },
     {
-      id: "BatchedColors",
+      id: "BatchedColors1",
       name: "BatchedColors",
-      availability: "2015-12-03T00:05:00Z/2015-12-03T00:06:00Z",
+      availability: "2015-12-03T00:05:00Z/2015-12-03T00:20:08Z",
       tileset: {
         uri:
           "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/freq-0/tileset.json",
       },
     },
+    {
+        id: "BatchedColors2",
+        name: "BatchedColors",
+        availability: "2015-12-03T00:20:08Z/2015-12-03T00:40:05Z",
+        tileset: {
+          uri:
+            "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/freq-2/tileset.json",
+        },
+    },
+    {
+        id: "BatchedColors3",
+        name: "BatchedColors",
+        availability: "2015-12-03T00:40:05Z/2015-12-03T01:00:03Z",
+        tileset: {
+          uri:
+            "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/freq-4/tileset.json",
+        },
+    },
+    {
+        id: "BatchedColors4",
+        name: "BatchedColors",
+        availability: "2015-12-03T01:00:03Z/2015-12-03T01:20:04Z",
+        tileset: {
+          uri:
+            "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/freq-6/tileset.json",
+        },
+    },
+    {
+        id: "BatchedColors5",
+        name: "BatchedColors",
+        availability: "2015-12-03T01:20:04Z/2015-12-03T01:40:05Z",
+        tileset: {
+          uri:
+            "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/freq-8/tileset.json",
+        },
+    },
+
   ];
 
 function view3dTilesInCzml(viewer) {
@@ -57,7 +94,7 @@ function view3dTilesInCzml(viewer) {
 
   dataSourcePromise
   .then(function (dataSource) {
-    viewer.flyTo(dataSource.entities.getById("BatchedColors"));
+    viewer.flyTo(dataSource.entities.getById("BatchedColors1"));
   })
   .catch(function (error) {
     window.alert(error);
