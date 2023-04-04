@@ -89,12 +89,12 @@ const czml = [
   ];
 
 function view3dTilesInCzml(viewer) {
-  const loadedDatasource = Cesium.CzmlDataSource.load(czml);
+  const loadedDatasource = Cesium.CzmlDataSource.load("https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/knit.czml");
   const dataSourcePromise = viewer.dataSources.add(loadedDatasource);
 
   dataSourcePromise
   .then(function (dataSource) {
-    viewer.flyTo(dataSource.entities.getById("BatchedColors1"));
+    viewer.flyTo(dataSource.entities.getById("npol-3dtile-0"));
   })
   .catch(function (error) {
     window.alert(error);
