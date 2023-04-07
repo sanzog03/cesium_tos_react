@@ -34,19 +34,20 @@ const czml = [
     {
       id: "document",
       version: "1.0",
-      clock: {
-        interval: "2015-12-03T00:00:00Z/2015-12-03T02:00:00Z",
-        currentTime: "2015-12-03T00:00:00Z",
-        multiplier: 16,
-      },
+      // clock: {
+      //   // interval: "2015-12-03T00:00:00Z/2015-12-03T02:00:00Z",
+      //   // currentTime: "2015-12-03T00:00:00Z",
+      //   // multiplier: 16,
+      // },
     },
     {
       id: "BatchedColors1",
       name: "BatchedColors",
       availability: "2015-12-03T00:05:00Z/2015-12-03T00:20:08Z",
       tileset: {
-        uri:
-          "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/freq-0/tileset.json",
+        uri: "https://ghrc-fcx-field-campaigns-szg.s3.amazonaws.com/Olympex/instrument-processed-data/npol/20151203/freq-1/tileset.json",
+        color: "color('#ff0000')", // this doesnot work
+        show: true // whereas this works 
       },
     },
     {
@@ -88,13 +89,39 @@ const czml = [
 
   ];
 
-function view3dTilesInCzml(viewer) {
-  const loadedDatasource = Cesium.CzmlDataSource.load(czml);
-  const dataSourcePromise = viewer.dataSources.add(loadedDatasource);
+async function view3dTilesInCzml(viewer) {
+  const loadDatasourcePromise = Cesium.CzmlDataSource.load(czml);
+  loadDatasourcePromise.then(ds => {
+    console.log(">>>>", ds)
+    console.log("entities>>>", ds.entities.values)
+
+    ds.entities.values.forEach((entity) => {
+      console.log("-->", entity.tileset)
+      let tileset = entity.tileset;
+
+      tileset.style = new Cesium.Cesium3DTileStyle({
+        color: getColorExpression(),
+        pointSize: "5000000",
+        show: false
+      });
+    })
+  })
+  const dataSourcePromise = viewer.dataSources.add(loadDatasourcePromise);
 
   dataSourcePromise
   .then(function (dataSource) {
+    // viewer.flyTo(dataSource.entities.getById("npol-3dtile-0"));
     viewer.flyTo(dataSource.entities.getById("BatchedColors1"));
+    // let entities = dataSource.entities._entities._array.map((ent) => {
+    //   return ent._id
+    // });
+    // console.log("hey!!", entities)
+    // let first_tileset = dataSource.entities.getById(entities[0])
+    // console.log(">>>", first_tileset)
+    // if(first_tileset){
+    //   first_tileset._tileset.style.pointSize = 2.0;
+    //   first_tileset._tileset.style.color = getColorExpression();  
+    // }
   })
   .catch(function (error) {
     window.alert(error);
@@ -125,3 +152,22 @@ const getProviderViewModels = () =>{
     )
     return providerViewModels
   }
+
+// utils
+
+function getColorExpression() {
+  let lead = 0
+  let reverse = true
+  let ascale = 4.346
+  let vmin = -10
+  let vmax = 30
+  let vrange = vmax - vmin
+  let hmin = 0.438
+  let hrange = 1
+  let revScale = ""
+  if (reverse) {
+    revScale = " * -1.0 + 1.0"
+  }
+  return `hsla((((clamp(\${value}, ${vmin}, ${vmax}) + ${vmin}) / ${vrange}) ${revScale}) * ${hrange} + ${hmin}, 1.0, 0.5, pow((\${value} - ${vmin})/${vrange}, ${ascale}))`
+}
+
