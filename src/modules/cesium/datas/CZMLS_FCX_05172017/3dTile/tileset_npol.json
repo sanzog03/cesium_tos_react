@@ -1,0 +1,146 @@
+{
+    "asset": {
+        "version": "1.0",
+        "type": "Airborne Radar"
+    },
+    "root": {
+        "geometricError": 1000000,
+        "refine": "REPLACE",
+        "boundingVolume": {
+            "region": [
+                -2.1979682335055215,
+                0.8246977658134751,
+                -2.1679311053607906,
+                0.8426414794481565,
+                2.600540585471551,
+                113.81292052255023
+            ]
+        },
+        "children": [
+            {
+                "availability": "2015-12-03T16:41:11Z/2015-12-03T16:57:11Z",
+                "geometricError": 16000,
+                "boundingVolume": {
+                    "region": [
+                        -2.1979682445526123,
+                        0.824697732925415,
+                        -2.167931079864502,
+                        0.8426414728164673,
+                        149.0,
+                        6521.0
+                    ]
+                },
+                "content": {
+                    "uri": "0_32.pnts"
+                },
+                "refine": "REPLACE",
+                "children": [
+                    {
+                        "availability": "2015-12-03T16:41:11Z/2015-12-03T16:57:11Z",
+                        "geometricError": 8000,
+                        "boundingVolume": {
+                            "region": [
+                                -2.1979682445526123,
+                                0.824697732925415,
+                                -2.167931079864502,
+                                0.8426414728164673,
+                                149.0,
+                                6521.0
+                            ]
+                        },
+                        "content": {
+                            "uri": "0_16.pnts"
+                        },
+                        "refine": "REPLACE",
+                        "children": [
+                            {
+                                "availability": "2015-12-03T16:41:11Z/2015-12-03T16:57:11Z",
+                                "geometricError": 4000,
+                                "boundingVolume": {
+                                    "region": [
+                                        -2.1979682445526123,
+                                        0.824697732925415,
+                                        -2.167931079864502,
+                                        0.8426414728164673,
+                                        149.0,
+                                        6521.0
+                                    ]
+                                },
+                                "content": {
+                                    "uri": "0_8.pnts"
+                                },
+                                "refine": "REPLACE",
+                                "children": [
+                                    {
+                                        "availability": "2015-12-03T16:41:11Z/2015-12-03T16:57:11Z",
+                                        "geometricError": 2000,
+                                        "boundingVolume": {
+                                            "region": [
+                                                -2.1979682445526123,
+                                                0.824697732925415,
+                                                -2.167931079864502,
+                                                0.8426414728164673,
+                                                149.0,
+                                                6521.0
+                                            ]
+                                        },
+                                        "content": {
+                                            "uri": "0_4.pnts"
+                                        },
+                                        "refine": "REPLACE",
+                                        "children": [
+                                            {
+                                                "availability": "2015-12-03T16:41:11Z/2015-12-03T16:57:11Z",
+                                                "geometricError": 1000,
+                                                "boundingVolume": {
+                                                    "region": [
+                                                        -2.1979682445526123,
+                                                        0.824697732925415,
+                                                        -2.167931079864502,
+                                                        0.8426414728164673,
+                                                        149.0,
+                                                        6521.0
+                                                    ]
+                                                },
+                                                "content": {
+                                                    "uri": "0_2.pnts"
+                                                },
+                                                "refine": "REPLACE",
+                                                "children": [
+                                                    {
+                                                        "availability": "2015-12-03T16:41:11Z/2015-12-03T16:57:11Z",
+                                                        "geometricError": 500,
+                                                        "boundingVolume": {
+                                                            "region": [
+                                                                -2.1979682445526123,
+                                                                0.824697732925415,
+                                                                -2.167931079864502,
+                                                                0.8426414728164673,
+                                                                149.0,
+                                                                6521.0
+                                                            ]
+                                                        },
+                                                        "content": {
+                                                            "uri": "0_1.pnts"
+                                                        },
+                                                        "refine": "REPLACE"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "properties": {
+        "epoch": "2015-12-03T16:46:11Z",
+        "refined": [
+            "0_1.pnts"
+        ]
+    }
+}
